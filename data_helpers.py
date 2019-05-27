@@ -13,38 +13,6 @@ from collections import defaultdict
 import time, json
 from collections import Counter
 import collections, pickle
-# from NLP import Integration
-
-# inteInfo = Integration()
-
-#vector to respresent the onehot vector for entities
-entity_vector = dict()
-Types = {}
-with open('./entity_util/Type.json') as json_data:
-    Types1 = json.load(json_data)
-    for key in Types1.keys():
-        Types[key.title()] = 0
-json_data.close()
-
-ent_dict = {}
-count  = 1
-for key in Types.keys():
-    ent_dict[key] = count
-    count += 1
-
-################################################################################################
-
-
-################################################################################################
-def char2float(text):
-    values = []
-    if 'PAD' not in text:
-        for val in text:
-            values.append(float(val))
-    else:
-        values = np.zeros(128)
-
-    return np.array(values)
 
 ################################################################################################
 def clean_str(string):
@@ -56,35 +24,6 @@ def clean_str(string):
     cleaned_text = ' '.join([w for w in cleaned_text.split() if len(w)>1 or w == 'i' or w == 'a'])
 
     return cleaned_text
-
-################################################################################################
-def char2vec(text, sequence_max_length, char_dict):
-    data = np.zeros(sequence_max_length)
-    for i in range(0, len(text)):
-        if i > sequence_max_length:
-            return data
-        elif text[i] in char_dict:
-            try:
-                data[i] = char_dict[text[i]]
-            except:
-                pass
-        else:
-            # unknown character set to be 68
-            try:
-                data[i] = 39
-            except:
-                pass
-    return data
-
-################################################################################################
-alphabet = "abcdefghijklmnopqrstuvwxyz0123456789' "
-char_dict = {}
-for i, c in enumerate(alphabet):
-    char_dict[c] = i + 1
-
-def load_char_text(utterance, sequence_max_length):
-    return char2vec(utterance, sequence_max_length, char_dict)
-
 
 ################################################################################################
 def extracting_structral_features(text, unpolished_text, label):
@@ -136,19 +75,13 @@ def load_data_and_labels(train_file, test_file):
     #     dialogue_dataset = json.load(handel)
 
     dialogue_dataset = []
-
     dialogue_dataset_train = open(train_file).read().split('\n')
     print len(dialogue_dataset_train)
 
     dialogue_dataset.extend(dialogue_dataset_train)
-
     dialogue_dataset_test = open(test_file).read().split('\n')
-
     print len(dialogue_dataset_test)
-
     dialogue_dataset.extend(dialogue_dataset_test)
-
-
 
     #preparing data for training
     num_classes = 42
@@ -225,11 +158,6 @@ def load_data_and_labels(train_file, test_file):
                 'PRP$': 19, 'RB': 20, 'RBR': 21, 'RBS': 22, 'RP': 23, 'SYM': 24, 'TO': 25, 'UH': 26, 'VB': 27, 'VBD': 28, 'VBG': 29, \
                 'VBN': 30, 'VBP': 31, 'VBZ': 32, 'WDT': 33, 'WP': 34, 'WP$': 35, 'WRB': 36, ',': 37}
 
-    # pos_dict = dict()
-    # pss = -1
-    # for i, label in enumerate(pos_lbl):
-    #     pos_dict[label] = i
-
 
     with open('/Users/aliahmadvand/Desktop/Dialogue_Act/Contextual_DA/swda-master/topic_list.pickle', 'rb') as f:
         topic_lbl = pickle.load(f)
@@ -264,14 +192,8 @@ def load_data_and_labels(train_file, test_file):
             pre_label = (sample['label'][-1])
             label = pre_label
 
-            # if label == 'qh':
-            #     if len(clean_str(sample['utt'][-1].lower())) > 0:
-            #         print sample['utt'][-1].lower()
 
             if len(label) > 0 :
-                # if label in label_list:
-                #     if iter > 100:
-                #         break
 
                     sample_count += 1
                     all_distinct_states.append(sample['label'][-1])
@@ -288,8 +210,6 @@ def load_data_and_labels(train_file, test_file):
                     data_utt2.append(utt_2)
                     utt_3 = clean_str(sample['utt'][0].lower())
                     data_utt3.append(utt_3)
-
-
 
 
                     data_features_pred.append(extracting_structral_features(utt_pred, sample['utt'][-1].lower(), label))
@@ -417,11 +337,6 @@ def load_data_and_labels(train_file, test_file):
     print(counter.keys())
     # print(counter.most_common(len(label_list)))
 
-
-
-    # print len(st1_features), '    ', len(st2_features)
-    # print len(ib1_features), '    ', len(ib2_features)
-    # print len(cl1_features), '    ', len(cl2_features)
     Data = [data_pred, data_utt1, data_utt2, data_utt3]
     features_Data = [data_features_pred, data_features_utt1, data_features_utt2, data_features_utt3]
     cl_Data = [data_pos_pred, data_pos1, data_pos2, data_pos3]
@@ -440,8 +355,6 @@ def load_data_and_labels(train_file, test_file):
     file_classorder = open('./auxiliary_files/class_order.json', 'w')
     json.dump(class_order, file_classorder)
 
-    # with open('/Users/aliahmadvand/Desktop/TopicClassifier/generate_dataset/classifier/pickle_files/hand_hub_dataset.pickle','rb') as handle:
-    #     data_handcraft = cPickle.load(handle)
 
     handcraft_train = []
     for i, sample in enumerate(data_pred):
@@ -453,7 +366,6 @@ def load_data_and_labels(train_file, test_file):
     with open('./auxiliary_files/vocabulary.pkl', 'wb') as handle:
         cPickle.dump(vocabulary, handle)
     #
-
 
     print 'write dict finishes.....'
 
