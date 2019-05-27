@@ -13,22 +13,6 @@ from embedding import Word2Vec
 from sklearn.metrics import classification_report as cr
 from sklearn.metrics import confusion_matrix
 
-
-
-
-def char2vec():
-    c2v = {}
-    char_embed = open('char_embedding.txt', 'r').read().split('\n')
-    for line in char_embed:
-        if len(line) > 0:
-            ch = line.split('\t')[0]
-            vector = line.split('\t')[1]
-            ch2_vect = []
-            for val in vector.split():
-                ch2_vect.append(float(val))
-
-            c2v[ch] = np.array(ch2_vect)
-    return c2v
 # Parameters
 # ==================================================
 
@@ -41,10 +25,6 @@ tf.flags.DEFINE_string("Test_Data", "./swda_datset_test.txt", "Data source for t
 # "/Users/aliahmadvand/Desktop/HowTo/Semantic-Clustering/GoogleNews-vectors-negative300.bin"
 tf.flags.DEFINE_string("word2vec", "./GoogleNews-vectors-negative300.bin", "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of word embedding")
-tf.flags.DEFINE_integer("embedding_entity_dim", 16, "Dimensionality of entity embedding (default: 16)")
-tf.flags.DEFINE_integer("embedding_char_dim", 16, "Dimensionality of entity embedding (default: 16)")
-tf.flags.DEFINE_integer("num_quantized_chars", 40, "num_quantized_chars")
-tf.flags.DEFINE_integer("char_length", 100, "char_length")
 tf.flags.DEFINE_string("filter_sizes", "1,2,3", "Comma-separated filter sizes (default: '1,2,3')")
 tf.flags.DEFINE_integer("num_filters", 100, "Number of filters per filter size (default: 128)")
 tf.flags.DEFINE_float("dropout_keep_prob", 0.5, "Dropout keep probability (default: 0.5)")
@@ -55,7 +35,7 @@ tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
 tf.flags.DEFINE_integer("num_epochs", 200, "Number of training epochs (default: 200)")
 tf.flags.DEFINE_integer("evaluate_every", 50 , "Evaluate model on dev set after this many steps (default: 100)")
 tf.flags.DEFINE_integer("checkpoint_every", 200, "Save model after this many steps (default: 100)")
-tf.flags.DEFINE_integer("num_checkpoints", 2, "Number of checkpoints to store (default: 5)")
+tf.flags.DEFINE_integer("num_checkpoints", 5, "Number of checkpoints to store (default: 5)")
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
 tf.flags.DEFINE_boolean("log_device_placement", False, "Log placement of ops on devices")
@@ -86,7 +66,6 @@ x_utt3 = data_helpers.fit_transform(x_text[3], vocab_processor, vocab)
 x_shuf, x_utt1_shuf, x_utt2_shuf, x_utt3_shuf, x_char_shuf, x_char1_shuf, x_char2_shuf, x_ib1_shuf, x_ib2_shuf, x_pos0_shuf, x_pos1_shuf, x_pos2_shuf, x_pos3_shuf, x_spId0_shuf, x_spId1_shuf, x_spId2_shuf, x_spId3_shuf, x_hub0_shuf, x_hub1_shuf, x_hub2_shuf, x_mtp0_shuf, x_mtp1_shuf, x_mtp2_shuf, x_feat0_shuf, x_feat1_shuf, x_feat2_shuf, x_feat3_shuf, y_shuf, handcraft_shuf = \
 x, x_utt1, x_utt2, x_utt3, x_char[0], x_char[1], x_char[2], x_ib[0], x_ib[1], x_pos[0], x_pos[1], x_pos[2], x_pos[3], x_spId[0], x_spId[1], x_spId[2], x_spId[3], x_hub[0], x_hub[1], x_hub[2], x_mtopic[0], x_mtopic[1], x_mtopic[2], x_features[0],  x_features[1], x_features[2], x_features[3], y_text, handcraft
 
-##### POS -- cl####
 # max_document_length = max([len(x.split(" ")) for x in x_text[0]])
 vocab_processor = np.zeros([len(x_text[0]), max_document_length])
 x_pos0_shuf = data_helpers.fit_transform_pos(x_pos0_shuf, vocab_processor)
@@ -107,10 +86,7 @@ x_shuffled, x_utt1_shuffled, x_utt2_shuffled, x_utt3_shuffled, x_char_shuffled, 
 print "len(x): ",  x_shuffled.shape
 print "train_dev_index: ", train_dev_index
 dev_sample_index = -1 * ( x_shuffled.shape[0] - train_dev_index)
-# print x[-1 * ( x_shuffled.shape[0] - 4186)]
-# print y_shuf[ - 4187]
-# dev_sample_index = -1 * 5
-# dev_sample_index = (-1) * ( y_shuffled * .8)
+
 x_train, x_dev = x_shuffled[:train_dev_index], x_shuffled[dev_sample_index:]
 x_utt1_train, x_utt1_dev = x_utt1_shuffled[:train_dev_index], x_utt1_shuffled[dev_sample_index:]
 x_utt2_train, x_utt2_dev = x_utt2_shuffled[:train_dev_index], x_utt2_shuffled[dev_sample_index:]
@@ -263,31 +239,6 @@ with tf.Graph().as_default():
             sess.run(cnn.W_utt_1.assign(initW))
             sess.run(cnn.W_utt_2.assign(initW))
             # sess.run(cnn.W_utt_3.assign(initW))
-
-
-        r=1
-        if r == 0:
-
-            initW_char = np.random.uniform(-0.25, 0.25, (40, FLAGS.embedding_char_dim))
-            c2v = char2vec()
-
-            alphabet = "abcdefghijklmnopqrstuvwxyz0123456789' "
-            char_dict = {}
-            for i, c in enumerate(alphabet):
-                char_dict[c] = i + 1
-
-            char_dict['PAD'] = 0
-            char_dict['NOT'] = 39
-
-            for ch in c2v.keys():
-                initW_char[char_dict[ch]] = c2v[ch]
-
-            sess.run(cnn.W_char0.assign(initW_char))
-            # sess.run(cnn.W_utt_1.assign(initW))
-            # sess.run(cnn.W_utt_2.assign(initW))
-
-
-
 
 
         def train_step(x_batch, x_utt1_batch, x_utt2_batch, x_utt3_batch, x_char_batch, x_char1_batch, x_char2_batch, x_ib1_batch, x_ib2_batch, x_pos0_batch, x_pos1_batch, x_pos2_batch, x_pos3_batch, x_spId0_batch, x_spId1_batch, x_spId2_batch, x_spId3_batch, x_hub0_batch, x_hub1_batch, x_hub2_batch, x_mtp0_batch, x_mtp1_batch, x_mtp2_batch, x_feat0_batch, x_feat1_batch, x_feat2_batch, x_feat3_batch, hand_batch, y_batch):
