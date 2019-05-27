@@ -2,10 +2,9 @@ import tensorflow as tf
 import numpy as np
 
 
-class CDAC(object):
+class ContextualDAC(object):
     """
-    A CNN for text classification.
-    Uses an embedding layer, followed by a convolutional, max-pooling and softmax layer.
+       Contextual Dialogue Act Classification 
     """
     def __init__(self, sequence_length, num_classes, vocab_size, vocab_entity_size, vocab_pos_size, sequence_char_length, num_quantized_chars,
     embedding_size, embedding_entity_size, embedding_char_size, embedding_pos_size, filter_sizes, num_filters, l2_reg_lambda=0.0):
