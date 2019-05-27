@@ -4,7 +4,7 @@ import os, warnings, sys, re
 import time, pickle
 import datetime
 import data_helpers
-from CDAC import cdac
+from cdac import CDAC
 from tensorflow.contrib import learn
 from sklearn.utils import shuffle
 from sklearn.preprocessing import normalize
@@ -163,7 +163,7 @@ with tf.Graph().as_default():
       log_device_placement=FLAGS.log_device_placement)
     sess = tf.Session(config=session_conf)
     with sess.as_default():
-        cnn = cdac(
+        cnn = CDAC(
             sequence_length=x_train.shape[1],
             num_classes=42,
             vocab_size=len(vocab),
