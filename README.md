@@ -1,6 +1,6 @@
 # CDAC
 Contextual Dialogue Act Classification for Open-Domain Conversational Agents
 
-   Dependencies
-   Tensorflow 1.8 \n
+   Dependencies <br />
+   Tensorflow 1.8 <br />
    nltk
