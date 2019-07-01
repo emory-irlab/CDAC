@@ -1,7 +1,7 @@
 # CDAC
 This code belongs to the "Contextual Dialogue Act Classification for Open-Domain Conversational Agents" SIGIR 2019 <a href="https://sigir.org/sigir2019/program/accepted/">Link</a> 
 
-Dependencies <br />
+Dependencies: <br />
 
 Python 2.7 <br />
 Tensorflow 1.8 <br />
