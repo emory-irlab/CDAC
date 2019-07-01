@@ -9,4 +9,4 @@ nltk 3.3 <br />
 spacy 2.0.12 <br />
 numpy 1.14.3 <br />
 
-Some of the missclassified utterances are shown in Wrong-pred.txt file.
+Some of the missclassified utterances are shown in wrong-pred.txt file.
