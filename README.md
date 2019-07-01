@@ -8,3 +8,5 @@ Tensorflow 1.8 <br />
 nltk 3.3 <br />
 spacy 2.0.12 <br />
 numpy 1.14.3 <br />
+
+Some of the missclassified utterances are shown in Wrong-pred file.
