@@ -23,7 +23,6 @@ tf.flags.DEFINE_string("Training_Data", "./dataset/swda_datset_training.txt", "D
 tf.flags.DEFINE_string("Test_Data", "./dataset/swda_datset_test.txt", "Data source for the positive data.")
 
 # Model Hyperparameters
-tf.flags.DEFINE_string("word2vec", "./GoogleNews-vectors-negative300.bin", "Word2vec file with pre-trained embeddings (default: None)")
 tf.flags.DEFINE_integer("embedding_dim", 300, "Dimensionality of word embedding")
 tf.flags.DEFINE_string("filter_sizes", "1,2,3", "Comma-separated filter sizes (default: '1,2,3')")
 tf.flags.DEFINE_integer("num_filters", 100, "Number of filters per filter size (default: 128)")
