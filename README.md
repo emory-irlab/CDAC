@@ -1,6 +1,6 @@
 # CDAC
 This code belongs to the "Contextual Dialogue Act Classification for Open-Domain Conversational Agents" SIGIR 2019. 
-<br />. The paper is available on <a href="http://www.quora.com/Adam-DAngelo">Quora profile link for Adam D'Angelo</a>
+<br />. The paper is available on <a href="https://sigir.org/sigir2019/program/accepted/"></a>
 
 Dependencies <br />
 
