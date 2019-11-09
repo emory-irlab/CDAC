@@ -13,6 +13,35 @@ import time, json
 from collections import Counter
 import collections, pickle
 
+
+################################################################################################
+################################################################################################
+def char2vec(text, sequence_max_length, char_dict):
+    data = np.zeros(sequence_max_length)
+    for i in range(0, len(text)):
+        if i > sequence_max_length:
+            return data
+        elif text[i] in char_dict:
+            try:
+                data[i] = char_dict[text[i]]
+            except:
+                pass
+        else:
+            # unknown character set to be 68
+            try:
+                data[i] = 39
+            except:
+                pass
+    return data
+
+################################################################################################
+alphabet = "abcdefghijklmnopqrstuvwxyz0123456789' "
+char_dict = {}
+for i, c in enumerate(alphabet):
+    char_dict[c] = i + 1
+
+def load_char_text(utterance, sequence_max_length):
+    return char2vec(utterance, sequence_max_length, char_dict)
 ################################################################################################
 def clean_str(string):
     # string = "{C And then } the same in Vietnam, [ you would, + you wouldn't ] handle Vietnam the same way, you would handle, {F uh, } Saddam Houssein."
