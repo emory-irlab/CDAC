@@ -3,7 +3,6 @@ import numpy as np
 import re, json
 import itertools
 from collections import Counter
-from reader import TSVReader
 import cPickle
 from embedding import Word2Vec
 # from entity_util import GetEntities
